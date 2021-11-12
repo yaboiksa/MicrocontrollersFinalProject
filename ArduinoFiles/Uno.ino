@@ -70,7 +70,7 @@ void checkWin(byte y, byte x){
     }
     //      b. Check horizontal
     connectedPieces = 1;
-    if ((x >= 0) || (x <= 6)){
+    if ((x >= 0) || (x <= 6)){ // ?
         if (x == 0){
             dir = true;
         }
@@ -107,7 +107,11 @@ void checkWin(byte y, byte x){
     }
 
 
+    //      c. Check left diagonal
     
+
+    //      d. Check right diagonal
+
 
 
 
