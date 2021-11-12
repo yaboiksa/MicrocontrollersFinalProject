@@ -5,16 +5,16 @@ enum Player{
 };
 
 Player Board[7][7];
-int Heights[7] = {0, 0, 0, 0, 0, 0, 0};
+byte Heights[7] = {0, 0, 0, 0, 0, 0, 0};
 Player currPlayer = Player1;
 
-void putPiece(int Column){
+void putPiece(byte Column){
     // I. Place the Piece
     // II. Check if win condition is met
     // III. Switch which player
 
-    int currX = Column;
-    int currY = Heights[Column];
+    byte currX = Column;
+    byte currY = Heights[Column];
 
     // I. Place the Piece
     Board[currY][currX] = currPlayer;
@@ -32,10 +32,26 @@ void putPiece(int Column){
     }
 }
 
-void checkWin(int y, int x){
+void checkWin(byte y, byte x){
     // I. Check everything
-    //      a.
-    // II. If won output winscreen
+    //      a. Check down
+    //      b. Check horizontal
+    //      c. Check left diagonal
+    //      d. Check right diagonal
+    // II. If won output win
+
+    // I. Check everything
+    //      a. Check down
+    if (Heights[x] == 4){
+        for (byte i = 0; i < count; i++)
+        {
+            /* code */
+        }
+        
+    }
+
+
+
 }
 
 
