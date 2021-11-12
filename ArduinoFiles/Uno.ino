@@ -118,6 +118,9 @@ void checkWin(unsigned char y, unsigned char x){
 
 }
 
+void display(){
+    
+}
 
 void setup(){}
 
