@@ -5,17 +5,17 @@ enum Player{
 };
 
 Player Board[7][7];
-byte Heights[7] = {0, 0, 0, 0, 0, 0, 0};
+unsigned char Heights[7] = {0, 0, 0, 0, 0, 0, 0};
 Player currPlayer = Player1;
 bool Won = false;
 
-void putPiece(byte Column){
+void putPiece(unsigned char Column){
     // I. Place the Piece
     // II. Check if win condition is met
     // III. Switch which player
 
-    int currX = Column; // refactor to byte later
-    int currY = Heights[Column]; // refactor to byte later
+    unsigned char currX = Column;
+    unsigned char currY = Heights[Column];
 
     // I. Place the Piece
     Board[currY][currX] = currPlayer;
@@ -35,7 +35,7 @@ void putPiece(byte Column){
     }
 }
 
-void checkWin(byte y, byte x){
+void checkWin(unsigned char y, unsigned char x){
     // I. Check everything
     //      a. Check down
     //      b. Check horizontal
@@ -47,9 +47,9 @@ void checkWin(byte y, byte x){
     //          } And check if at endpoints
     // II. If won output win
 
-    int connectedPieces; // refactor to byte later
-    int i; // refactor to byte later
-    bool dir = false; // refactor?
+    unsigned char connectedPieces;
+    unsigned char i;
+    bool dir = false;
 
     // I. Check everything
     //      a. Check down
