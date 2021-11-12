@@ -7,6 +7,7 @@ enum Player{
 Player Board[7][7];
 byte Heights[7] = {0, 0, 0, 0, 0, 0, 0};
 Player currPlayer = Player1;
+bool Won = false;
 
 void putPiece(byte Column){
     // I. Place the Piece
@@ -22,6 +23,8 @@ void putPiece(byte Column){
 
     // II. Check if win condition is met
     checkWin(currY, currX);
+    if (Won == true)
+        return;      
 
     // III. Switch which player
     if (currPlayer == Player1){
@@ -38,7 +41,8 @@ void checkWin(byte y, byte x){
     //      b. Check horizontal
     //      c. Check left diagonal
     //      d. Check right diagonal
-    //          }Check left side
+    //          ] For all checks
+    //          } Check left side
     //          } And check right side
     //          } And check if at endpoints
     // II. If won output win
@@ -58,8 +62,10 @@ void checkWin(byte y, byte x){
             connectedPieces++;
         }
         
+        // II. If won output win
         if (connectedPieces == 4){
-            // Win
+            Won = true;
+            return;
         }
     }
     //      b. Check horizontal
@@ -78,7 +84,6 @@ void checkWin(byte y, byte x){
                 dir = true;
             }
             
-
             //  }Check right side
             if((Board[y][x + i] == currPlayer) && dir == true){
                 connectedPieces++;
@@ -87,12 +92,17 @@ void checkWin(byte y, byte x){
                 dir = false;
             }
 
-
             // } Check if at endpoints
             if ((x == 0) || (x - i == 0))
                     dir = true;
             if ((x == 6) || (x - i == 6))
                     dir = false;
+
+            // II. If won output win
+            if (connectedPieces == 4){
+                Won = true;
+                return;
+            }
         }
     }
 
