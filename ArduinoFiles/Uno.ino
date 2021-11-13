@@ -1,5 +1,6 @@
 
 enum Player{
+    NoPlayer,
     Player1,
     Player2
 };
