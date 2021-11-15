@@ -1,4 +1,41 @@
 
+#include <MCUFRIEND_kbv.h>
+MCUFRIEND_kbv tft;       // hard-wired for UNO shields anyway.
+#include <TouchScreen.h>
+
+//
+// Display Initialization
+//
+const int XP=6,XM=A2,YP=A1,YM=7; //ID=0x9341
+const int TS_LEFT=184,TS_RT=916,TS_TOP=953,TS_BOT=193; // Calibrated pretty well
+
+TouchScreen ts = TouchScreen(XP, YP, XM, YM, 300);
+TSPoint tp;
+
+#define MINPRESSURE 200
+#define MAXPRESSURE 1000
+
+int16_t BOXSIZE;
+int16_t PENRADIUS = 1;
+uint16_t ID, currentcolor;
+uint8_t Orientation = 3;    //LANDSCAPE
+
+// Assign human-readable names to some common 16-bit color values:
+#define BLACK   0x0000
+#define BLUE    0x001F
+#define RED     0xF800
+#define GREEN   0x07E0
+#define CYAN    0x07FF
+#define MAGENTA 0xF81F
+#define YELLOW  0xFFE0
+#define WHITE   0xFFFF
+//
+// End of Display Initialization
+//
+
+//
+// Game related Initialization
+//
 enum Player{
     NoPlayer,
     Player1,
@@ -9,6 +46,9 @@ Player Board[7][7];
 unsigned char Heights[7] = {0, 0, 0, 0, 0, 0, 0};
 Player currPlayer = Player1;
 bool Won = false;
+//
+// End of Game Initializations
+//
 
 void putPiece(unsigned char Column){
     // I. Place the Piece
@@ -119,11 +159,25 @@ void checkWin(unsigned char y, unsigned char x){
 
 }
 
-void display(){
+void display(void){
     
 }
 
-void setup(){}
+void showStartScreen(void){
+
+}
+
+void setup(){
+    uint16_t tmp;
+
+    tft.reset();
+    ID = tft.readID();
+    tft.begin(ID);
+    Serial.begin(9600);
+    tft.setRotation(Orientation);
+    tft.fillScreen(BLACK);
+    
+}
 
 void loop(){
 
