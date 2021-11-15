@@ -197,7 +197,14 @@ void checkWin(unsigned char y, unsigned char x){
     }
 }
 
-void setup(){}
+
+void display(){
+    
+}
+
+void setup(){
+
+}
 
 void loop(){
 
