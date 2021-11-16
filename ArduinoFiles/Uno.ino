@@ -74,6 +74,9 @@ void putPiece(unsigned char Column){
     else{
         currPlayer = Player1;
     }
+
+    display();
+
 }
 
 void checkWin(unsigned char y, unsigned char x){
@@ -254,9 +257,20 @@ void display(void){
         tft.fillRect((BOXSIZE * 4/10) + (BOXSIZE / 2) + (BOXSIZE*j), BOXSIZE /10, BOXSIZE /5, BOXSIZE * 2/5, BLUE);
     }
 
+
+    /*
+    // may need to change row and column
+    for (int column = 6; column >= 0; i--) {
+        for (int row = 0; row < 7; row++) {
+            // print Board[column][row]
+        }
+    }
+    */
+
+
     // III. Draw the Pieces/holes
     for (int column = 0; column < 7; column++){
-        for (int row = 6; row >= 0; row--){
+        for (int row = 0; row < 7; row++){
             if(Board[column][row] == NoPlayer)
                 tft.fillCircle(BOXSIZE * (column + 1), (BOXSIZE * 7/10 ) * (row + 1) + (BOXSIZE/2) + 7, (BOXSIZE * 3/5) /2, WHITE);
             else if(Board[column][row] == Player1)
@@ -286,9 +300,91 @@ void setup(void){
     tft.fillScreen(BLACK);
 
     BOXSIZE = tft.width() / 8;
+
+    display();
+
 }
 
 void loop(void){
+    uint16_t xpos, ypos;  //screen coordinates
+    tp = ts.getPoint();   //tp.x, tp.y are ADC values
 
-    
+    // if sharing pins, you'll need to fix the directions of the touchscreen pins
+    pinMode(XM, OUTPUT);
+    pinMode(YP, OUTPUT);
+    // we have some minimum pressure we consider 'valid'
+    // pressure of 0 means no pressing!
+
+    if (tp.z > MINPRESSURE && tp.z < MAXPRESSURE) {
+        // most mcufriend have touch (with icons) that extends below the TFT
+        // screens without icons need to reserve a space for "erase"
+        // scale the ADC values from ts.getPoint() to screen values e.g. 0-239
+        //
+        // Calibration is true for PORTRAIT. tp.y is always long dimension 
+        // map to your current pixel orientation
+        switch (Orientation) {
+            case 0:
+                xpos = map(tp.x, TS_LEFT, TS_RT, 0, tft.width());
+                ypos = map(tp.y, TS_TOP, TS_BOT, 0, tft.height());
+                break;
+            case 1:
+                xpos = map(tp.y, TS_TOP, TS_BOT, 0, tft.width());
+                ypos = map(tp.x, TS_RT, TS_LEFT, 0, tft.height());
+                break;
+            case 2:
+                xpos = map(tp.x, TS_RT, TS_LEFT, 0, tft.width());
+                ypos = map(tp.y, TS_BOT, TS_TOP, 0, tft.height());
+                break;
+            case 3:
+                xpos = map(tp.y, TS_BOT, TS_TOP, 0, tft.width());
+                ypos = map(tp.x, TS_LEFT, TS_RT, 0, tft.height());
+                break;
+        }
+
+        // are we in top color box area ?
+        if (ypos < BOXSIZE) {
+            if (currPlayer == Player1){
+                currentcolor = RED;
+            }
+            else {
+                currentcolor = BLACK;
+            }
+
+            if (xpos < BOXSIZE + BOXSIZE/2) {
+                putPiece(0);
+                tft.fillTriangle((BOXSIZE / 2) + (BOXSIZE / 2) + (BOXSIZE*1),BOXSIZE * 3/4,(BOXSIZE / 4)  + (BOXSIZE / 2) + (BOXSIZE*1),BOXSIZE /2,(BOXSIZE * 3/4) + (BOXSIZE / 2) + (BOXSIZE*1), BOXSIZE /2, currentcolor);
+                tft.fillRect((BOXSIZE * 4/10) + (BOXSIZE / 2) + (BOXSIZE*1), BOXSIZE /10, BOXSIZE /5, BOXSIZE * 2/5, currentcolor);
+            } 
+            else if (xpos < BOXSIZE * 2 + BOXSIZE/2) {
+                putPiece(1);
+                tft.fillTriangle((BOXSIZE / 2) + (BOXSIZE / 2) + (BOXSIZE*2),BOXSIZE * 3/4,(BOXSIZE / 4)  + (BOXSIZE / 2) + (BOXSIZE*2),BOXSIZE /2,(BOXSIZE * 3/4) + (BOXSIZE / 2) + (BOXSIZE*2), BOXSIZE /2, currentcolor);
+                tft.fillRect((BOXSIZE * 4/10) + (BOXSIZE / 2) + (BOXSIZE*2), BOXSIZE /10, BOXSIZE /5, BOXSIZE * 2/5, currentcolor);
+            } 
+            else if (xpos < BOXSIZE * 3 + BOXSIZE/2) {
+                putPiece(2);
+                tft.fillTriangle((BOXSIZE / 2) + (BOXSIZE / 2) + (BOXSIZE*3),BOXSIZE * 3/4,(BOXSIZE / 4)  + (BOXSIZE / 2) + (BOXSIZE*3),BOXSIZE /2,(BOXSIZE * 3/4) + (BOXSIZE / 2) + (BOXSIZE*3), BOXSIZE /2, currentcolor);
+                tft.fillRect((BOXSIZE * 4/10) + (BOXSIZE / 2) + (BOXSIZE*3), BOXSIZE /10, BOXSIZE /5, BOXSIZE * 2/5, currentcolor);
+            } 
+            else if (xpos < BOXSIZE * 4 + BOXSIZE/2) {
+                putPiece(3);  
+                tft.fillTriangle((BOXSIZE / 2) + (BOXSIZE / 2) + (BOXSIZE*4),BOXSIZE * 3/4,(BOXSIZE / 4)  + (BOXSIZE / 2) + (BOXSIZE*4),BOXSIZE /2,(BOXSIZE * 3/4) + (BOXSIZE / 2) + (BOXSIZE*4), BOXSIZE /2, currentcolor);
+                tft.fillRect((BOXSIZE * 4/10) + (BOXSIZE / 2) + (BOXSIZE*4), BOXSIZE /10, BOXSIZE /5, BOXSIZE * 2/5, currentcolor);
+            } 
+            else if (xpos < BOXSIZE * 5 + BOXSIZE/2) {
+                putPiece(4);
+                tft.fillTriangle((BOXSIZE / 2) + (BOXSIZE / 2) + (BOXSIZE*5),BOXSIZE * 3/4,(BOXSIZE / 4)  + (BOXSIZE / 2) + (BOXSIZE*5),BOXSIZE /2,(BOXSIZE * 3/4) + (BOXSIZE / 2) + (BOXSIZE*5), BOXSIZE /2, currentcolor);
+                tft.fillRect((BOXSIZE * 4/10) + (BOXSIZE / 2) + (BOXSIZE*5), BOXSIZE /10, BOXSIZE /5, BOXSIZE * 2/5, currentcolor);
+            } 
+            else if (xpos < BOXSIZE * 6 + BOXSIZE/2) {
+                putPiece(5);
+                tft.fillTriangle((BOXSIZE / 2) + (BOXSIZE / 2) + (BOXSIZE*6),BOXSIZE * 3/4,(BOXSIZE / 4)  + (BOXSIZE / 2) + (BOXSIZE*6),BOXSIZE /2,(BOXSIZE * 3/4) + (BOXSIZE / 2) + (BOXSIZE*6), BOXSIZE /2, currentcolor);
+                tft.fillRect((BOXSIZE * 4/10) + (BOXSIZE / 2) + (BOXSIZE*6), BOXSIZE /10, BOXSIZE /5, BOXSIZE * 2/5, currentcolor);
+            } 
+            else if (xpos < BOXSIZE * 7 + BOXSIZE/2) {
+                putPiece(6);
+                tft.fillTriangle((BOXSIZE / 2) + (BOXSIZE / 2) + (BOXSIZE*7),BOXSIZE * 3/4,(BOXSIZE / 4)  + (BOXSIZE / 2) + (BOXSIZE*7),BOXSIZE /2,(BOXSIZE * 3/4) + (BOXSIZE / 2) + (BOXSIZE*7), BOXSIZE /2, currentcolor);
+                tft.fillRect((BOXSIZE * 4/10) + (BOXSIZE / 2) + (BOXSIZE*7), BOXSIZE /10, BOXSIZE /5, BOXSIZE * 2/5, currentcolor);
+            } 
+        }
+    }
 }
