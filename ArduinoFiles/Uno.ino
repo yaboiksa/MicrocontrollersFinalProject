@@ -119,6 +119,9 @@ void checkWin(unsigned char y, unsigned char x){
         if (x == 0){
             dir = true;
         }
+        if (x == 6){
+            dir = false;
+        }
 
         for ( i = 1; i < 5; i++){
             //  }Check left side
@@ -271,12 +274,12 @@ void display(void){
     // III. Draw the Pieces/holes
     for (int column = 0; column < 7; column++){
         for (int row = 0; row < 7; row++){
-            if(Board[column][row] == NoPlayer)
-                tft.fillCircle(BOXSIZE * (column + 1), (BOXSIZE * 7/10 ) * (row + 1) + (BOXSIZE/2) + 7, (BOXSIZE * 3/5) /2, WHITE);
-            else if(Board[column][row] == Player1)
-                tft.fillCircle(BOXSIZE * (column + 1), (BOXSIZE * 7/10 ) * (row + 1) + (BOXSIZE/2) + 7, (BOXSIZE * 3/5) /2, RED);
-            else if(Board[column][row] == Player2)
-                tft.fillCircle(BOXSIZE * (column + 1), (BOXSIZE * 7/10 ) * (row + 1) + (BOXSIZE/2) + 7, (BOXSIZE * 3/5) /2, BLACK);
+            if(Board[6 - column][row] == NoPlayer)
+                tft.fillCircle(BOXSIZE * (row + 1), (BOXSIZE * 7/10 ) * (column + 1) + (BOXSIZE/2) + 7, (BOXSIZE * 3/5) /2, WHITE);
+            else if(Board[6 - column][row] == Player1)
+                tft.fillCircle(BOXSIZE * (row + 1), (BOXSIZE * 7/10 ) * (column + 1) + (BOXSIZE/2) + 7, (BOXSIZE * 3/5) /2, RED);
+            else if(Board[6 - column][row] == Player2)
+                tft.fillCircle(BOXSIZE * (row + 1), (BOXSIZE * 7/10 ) * (column + 1) + (BOXSIZE/2) + 7, (BOXSIZE * 3/5) /2, BLACK);
         }   
     }
     
