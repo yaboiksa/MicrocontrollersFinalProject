@@ -243,7 +243,7 @@ void display(void){
     // III. Draw the Pieces/holes
 
     // I. Draw the board
-    tft.fillScreen(BLACK);
+    tft.fillScreen(WHITE);
     tft.fillRect(0, BOXSIZE, BOXSIZE * 8, BOXSIZE * 7, YELLOW);
     tft.fillRect(0, BOXSIZE, BOXSIZE / 2, BOXSIZE * 7, BLUE);
     tft.fillRect(BOXSIZE * 15/2, 0, BOXSIZE / 2, BOXSIZE * 7, BLUE);
@@ -258,11 +258,11 @@ void display(void){
     for (int column = 0; column < 7; column++){
         for (int row = 6; row >= 0; row--){
             if(Board[column][row] == NoPlayer)
-                tft.fillCircle(BOXSIZE * (column + 1), (BOXSIZE * 7/10 ) * (row + 1) + (BOXSIZE/2) + 7, (BOXSIZE * 3/5) /2, BLACK);
+                tft.fillCircle(BOXSIZE * (column + 1), (BOXSIZE * 7/10 ) * (row + 1) + (BOXSIZE/2) + 7, (BOXSIZE * 3/5) /2, WHITE);
             else if(Board[column][row] == Player1)
                 tft.fillCircle(BOXSIZE * (column + 1), (BOXSIZE * 7/10 ) * (row + 1) + (BOXSIZE/2) + 7, (BOXSIZE * 3/5) /2, RED);
             else if(Board[column][row] == Player2)
-                tft.fillCircle(BOXSIZE * (column + 1), (BOXSIZE * 7/10 ) * (row + 1) + (BOXSIZE/2) + 7, (BOXSIZE * 3/5) /2, YELLOW);
+                tft.fillCircle(BOXSIZE * (column + 1), (BOXSIZE * 7/10 ) * (row + 1) + (BOXSIZE/2) + 7, (BOXSIZE * 3/5) /2, BLACK);
         }   
     }
     
@@ -275,7 +275,7 @@ void showStartScreen(void){
 
 void setup(){
     delay(5000);
-    
+
     uint16_t tmp;
 
     tft.reset();
