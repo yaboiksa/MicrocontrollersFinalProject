@@ -274,6 +274,8 @@ void showStartScreen(void){
 }
 
 void setup(){
+    delay(5000);
+    
     uint16_t tmp;
 
     tft.reset();
