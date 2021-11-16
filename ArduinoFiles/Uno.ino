@@ -76,6 +76,9 @@ void checkWin(unsigned char y, unsigned char x){
         if (x == 0){
             dir = true;
         }
+        if (x == 6 ) {
+            dir = false;
+        }
 
         for ( i = 1; i < 5; i++){
             //  }Check left side
