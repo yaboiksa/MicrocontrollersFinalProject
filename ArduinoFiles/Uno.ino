@@ -284,11 +284,6 @@ void setup(){
     tft.fillScreen(BLACK);
 
     BOXSIZE = tft.width() / 8;
-
-    
-
-void display(){
-    
 }
 
 void setup(){
