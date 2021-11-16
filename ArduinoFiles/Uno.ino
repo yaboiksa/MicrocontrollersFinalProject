@@ -273,7 +273,7 @@ void showStartScreen(void){
 
 }
 
-void setup(){
+void setup(void){
     delay(5000);
 
     uint16_t tmp;
@@ -288,11 +288,7 @@ void setup(){
     BOXSIZE = tft.width() / 8;
 }
 
-void setup(){
-
-}
-
-void loop(){
+void loop(void){
 
     
 }
