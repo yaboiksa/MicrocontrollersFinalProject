@@ -120,18 +120,10 @@ void checkWin(unsigned char y, unsigned char x) {
     //      b. Check horizontal
     connectedPieces = 1;
     if ((x >= 0) || (x <= 6)) {
-    /*    if (x == 0) {
-            dir = true;
-        }
-
-        if (x == 6) {
-            dir = false;
-        }*/
-
+        //  }Check left side
         for (i = 1; i < 5; i++) {
-            //  }Check left side
             if (x - i >= 0) {
-                if ((Board[y][x - i] == currPlayer)/*&& dir == false*/) {
+                if (Board[y][x - i] == currPlayer) {
                     connectedPieces++;
                 }
                 else {
@@ -141,10 +133,10 @@ void checkWin(unsigned char y, unsigned char x) {
             }
         }
 
+        //  }Check right side
         for (i = 1; i < 5; i++) {
-            //  }Check right side
             if (x + i <= 6) {
-                if ((Board[y][x + i] == currPlayer) /* && dir == true*/) {
+                if (Board[y][x + i] == currPlayer) {
                     connectedPieces++;
                 }
                 else {
@@ -153,12 +145,6 @@ void checkWin(unsigned char y, unsigned char x) {
                 }
             }
         }
-
-            //// } Check if at endpoints
-            //if ((x == 0) || (x - i == 0))
-            //    dir = true;
-            //if ((x == 6) || (x - i == 6))
-            //    dir = false;
 
         // II. If won output win
         if (connectedPieces == 4) {
@@ -314,6 +300,7 @@ void loop(void){
     // I. Initialize touch
     // II. Check for the pressure threshhold and map the x and y position
     // III. Check regions for piece addition
+    //      a. Indicator of the last piece that has been placed and where
 
 
     // I. Initialize touch
@@ -365,36 +352,44 @@ void loop(void){
 
             if (xpos < BOXSIZE + BOXSIZE/2) {
                 putPiece(0);
+                // a. Indicator of the last piece that has been placed and where
                 tft.fillTriangle((BOXSIZE / 2) + (BOXSIZE / 2), BOXSIZE * 3/4,(BOXSIZE / 4)  + (BOXSIZE / 2),BOXSIZE /2,(BOXSIZE * 3/4) + (BOXSIZE / 2), BOXSIZE /2, currentcolor);
                 tft.fillRect((BOXSIZE * 4/10) + (BOXSIZE / 2), BOXSIZE /10, BOXSIZE /5, BOXSIZE * 2/5, currentcolor);
             } 
             else if (xpos < BOXSIZE * 2 + BOXSIZE/2) {
                 putPiece(1);
+                // a. Indicator of the last piece that has been placed and where
                 tft.fillTriangle((BOXSIZE / 2) + (BOXSIZE / 2) + (BOXSIZE),BOXSIZE * 3/4,(BOXSIZE / 4)  + (BOXSIZE / 2) + (BOXSIZE),BOXSIZE /2,(BOXSIZE * 3/4) + (BOXSIZE / 2) + (BOXSIZE), BOXSIZE /2, currentcolor);
                 tft.fillRect((BOXSIZE * 4/10) + (BOXSIZE / 2) + (BOXSIZE), BOXSIZE /10, BOXSIZE /5, BOXSIZE * 2/5, currentcolor);
             } 
             else if (xpos < BOXSIZE * 3 + BOXSIZE/2) {
                 putPiece(2);
+                // a. Indicator of the last piece that has been placed and where
+
                 tft.fillTriangle((BOXSIZE / 2) + (BOXSIZE / 2) + (BOXSIZE*2),BOXSIZE * 3/4,(BOXSIZE / 4)  + (BOXSIZE / 2) + (BOXSIZE*2),BOXSIZE /2,(BOXSIZE * 3/4) + (BOXSIZE / 2) + (BOXSIZE*2), BOXSIZE /2, currentcolor);
                 tft.fillRect((BOXSIZE * 4/10) + (BOXSIZE / 2) + (BOXSIZE*2), BOXSIZE /10, BOXSIZE /5, BOXSIZE * 2/5, currentcolor);
             } 
             else if (xpos < BOXSIZE * 4 + BOXSIZE/2) {
                 putPiece(3);  
+                // a. Indicator of the last piece that has been placed and where
                 tft.fillTriangle((BOXSIZE / 2) + (BOXSIZE / 2) + (BOXSIZE*3),BOXSIZE * 3/4,(BOXSIZE / 4)  + (BOXSIZE / 2) + (BOXSIZE*3),BOXSIZE /2,(BOXSIZE * 3/4) + (BOXSIZE / 2) + (BOXSIZE*3), BOXSIZE /2, currentcolor);
                 tft.fillRect((BOXSIZE * 4/10) + (BOXSIZE / 2) + (BOXSIZE*3), BOXSIZE /10, BOXSIZE /5, BOXSIZE * 2/5, currentcolor);
             } 
             else if (xpos < BOXSIZE * 5 + BOXSIZE/2) {
                 putPiece(4);
+                // a. Indicator of the last piece that has been placed and where
                 tft.fillTriangle((BOXSIZE / 2) + (BOXSIZE / 2) + (BOXSIZE*4),BOXSIZE * 3/4,(BOXSIZE / 4)  + (BOXSIZE / 2) + (BOXSIZE*4),BOXSIZE /2,(BOXSIZE * 3/4) + (BOXSIZE / 2) + (BOXSIZE*4), BOXSIZE /2, currentcolor);
                 tft.fillRect((BOXSIZE * 4/10) + (BOXSIZE / 2) + (BOXSIZE*4), BOXSIZE /10, BOXSIZE /5, BOXSIZE * 2/5, currentcolor);
             } 
             else if (xpos < BOXSIZE * 6 + BOXSIZE/2) {
                 putPiece(5);
+                // a. Indicator of the last piece that has been placed and where
                 tft.fillTriangle((BOXSIZE / 2) + (BOXSIZE / 2) + (BOXSIZE*5),BOXSIZE * 3/4,(BOXSIZE / 4)  + (BOXSIZE / 2) + (BOXSIZE*5),BOXSIZE /2,(BOXSIZE * 3/4) + (BOXSIZE / 2) + (BOXSIZE*5), BOXSIZE /2, currentcolor);
                 tft.fillRect((BOXSIZE * 4/10) + (BOXSIZE / 2) + (BOXSIZE*5), BOXSIZE /10, BOXSIZE /5, BOXSIZE * 2/5, currentcolor);
             } 
             else if (xpos < BOXSIZE * 7 + BOXSIZE/2) {
                 putPiece(6);
+                // a. Indicator of the last piece that has been placed and where
                 tft.fillTriangle((BOXSIZE / 2) + (BOXSIZE / 2) + (BOXSIZE*6),BOXSIZE * 3/4,(BOXSIZE / 4)  + (BOXSIZE / 2) + (BOXSIZE*6),BOXSIZE /2,(BOXSIZE * 3/4) + (BOXSIZE / 2) + (BOXSIZE*6), BOXSIZE /2, currentcolor);
                 tft.fillRect((BOXSIZE * 4/10) + (BOXSIZE / 2) + (BOXSIZE*6), BOXSIZE /10, BOXSIZE /5, BOXSIZE * 2/5, currentcolor);
             } 
