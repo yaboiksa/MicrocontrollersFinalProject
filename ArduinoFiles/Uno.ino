@@ -3,6 +3,10 @@
 MCUFRIEND_kbv tft;       // hard-wired for UNO shields anyway.
 #include <TouchScreen.h>
 
+// SUIT was a play tester
+
+
+
 //
 // Display Initialization
 //
@@ -147,7 +151,7 @@ void checkWin(unsigned char y, unsigned char x) {
         }
 
         // II. If won output win
-        if (connectedPieces == 4) {
+        if (connectedPieces >= 4) {
             Won = true;
             return;
         }
@@ -190,7 +194,7 @@ void checkWin(unsigned char y, unsigned char x) {
                 dir = false;
 
             // II. If won output win
-            if (connectedPieces == 4) {
+            if (connectedPieces >= 4) {
                 Won = true;
                 return;
             }
@@ -234,7 +238,7 @@ void checkWin(unsigned char y, unsigned char x) {
                 dir = false;
 
             // II. If won output win
-            if (connectedPieces == 4) {
+            if (connectedPieces >= 4) {
                 Won = true;
                 return;
             }
@@ -251,7 +255,7 @@ void display(void){
     tft.fillScreen(WHITE);
     tft.fillRect(0, BOXSIZE, BOXSIZE * 8, BOXSIZE * 7, YELLOW);
     tft.fillRect(0, BOXSIZE, BOXSIZE / 2, BOXSIZE * 7, BLUE);
-    tft.fillRect(BOXSIZE * 15/2, 0, BOXSIZE / 2, BOXSIZE * 7, BLUE);
+    tft.fillRect(BOXSIZE * 15/2, BOXSIZE, BOXSIZE / 2, BOXSIZE * 7, BLUE);
 
     // II. Draw the controls
     for (int j = 0;  j < 7; j++){
