@@ -287,9 +287,12 @@ void setup(void){
 
 void loop(void){
     // I. Initialize touch
-    // II. Check for the pressure threshhold and map the x and y position
-    // III. Check regions for piece addition
-    //      a. Indicator of the last piece that has been placed and where
+    // II. Initialize the current competing colors
+    // III. Check for the pressure threshhold and map the x and y position
+    // IV. Check regions for piece addition
+    //      a. Bound check to ensure they dont overflow the board
+    //      b. Place the piece at the specified column
+    //      c. Indicator of the last piece that has been placed and where
 
 
     // I. Initialize touch
@@ -302,8 +305,15 @@ void loop(void){
     // we have some minimum pressure we consider 'valid'
     // pressure of 0 means no pressing!
 
+    // II. Initialize the current competing colors
+    if (currPlayer == Player1){
+        currentcolor = RED;
+    }
+    else {
+        currentcolor = BLACK;
+    }
 
-    // II. Check for the pressure threshhold and map the x and y position
+    // III. Check for the pressure threshhold and map the x and y position
     if (tp.z > MINPRESSURE && tp.z < MAXPRESSURE) {
         // most mcufriend have touch (with icons) that extends below the TFT
         // screens without icons need to reserve a space for "erase"
@@ -330,57 +340,77 @@ void loop(void){
                 break;
         }
 
-        // III. Check regions for piece addition
+        // IV. Check regions for piece addition
         if (ypos < BOXSIZE) {
-            if (currPlayer == Player1){
-                currentcolor = RED;
-            }
-            else {
-                currentcolor = BLACK;
-            }
-
             if (xpos < BOXSIZE + BOXSIZE/2) {
-                putPiece(0);
-                // a. Indicator of the last piece that has been placed and where
-                tft.fillTriangle((BOXSIZE / 2) + (BOXSIZE / 2), BOXSIZE * 3/4,(BOXSIZE / 4)  + (BOXSIZE / 2),BOXSIZE /2,(BOXSIZE * 3/4) + (BOXSIZE / 2), BOXSIZE /2, currentcolor);
-                tft.fillRect((BOXSIZE * 4/10) + (BOXSIZE / 2), BOXSIZE /10, BOXSIZE /5, BOXSIZE * 2/5, currentcolor);
+                // a. Bound check to ensure they dont overflow the board
+                if (Heights[0] <= 6){
+                    // b. Place the piece at the specified column
+                    putPiece(0);
+                    // c. Indicator of the last piece that has been placed and where
+                    tft.fillTriangle((BOXSIZE / 2) + (BOXSIZE / 2), BOXSIZE * 3/4,(BOXSIZE / 4)  + (BOXSIZE / 2),BOXSIZE /2,(BOXSIZE * 3/4) + (BOXSIZE / 2), BOXSIZE /2, currentcolor);
+                    tft.fillRect((BOXSIZE * 4/10) + (BOXSIZE / 2), BOXSIZE /10, BOXSIZE /5, BOXSIZE * 2/5, currentcolor);
+                }
             } 
             else if (xpos < BOXSIZE * 2 + BOXSIZE/2) {
-                putPiece(1);
-                // a. Indicator of the last piece that has been placed and where
-                tft.fillTriangle((BOXSIZE / 2) + (BOXSIZE / 2) + (BOXSIZE),BOXSIZE * 3/4,(BOXSIZE / 4)  + (BOXSIZE / 2) + (BOXSIZE),BOXSIZE /2,(BOXSIZE * 3/4) + (BOXSIZE / 2) + (BOXSIZE), BOXSIZE /2, currentcolor);
-                tft.fillRect((BOXSIZE * 4/10) + (BOXSIZE / 2) + (BOXSIZE), BOXSIZE /10, BOXSIZE /5, BOXSIZE * 2/5, currentcolor);
+                // a. Bound check to ensure they dont overflow the board
+                if (Heights[1] <= 6){
+                    // b. Place the piece at the specified column
+                    putPiece(1);
+                    // c. Indicator of the last piece that has been placed and where
+                    tft.fillTriangle((BOXSIZE / 2) + (BOXSIZE / 2) + (BOXSIZE),BOXSIZE * 3/4,(BOXSIZE / 4)  + (BOXSIZE / 2) + (BOXSIZE),BOXSIZE /2,(BOXSIZE * 3/4) + (BOXSIZE / 2) + (BOXSIZE), BOXSIZE /2, currentcolor);
+                    tft.fillRect((BOXSIZE * 4/10) + (BOXSIZE / 2) + (BOXSIZE), BOXSIZE /10, BOXSIZE /5, BOXSIZE * 2/5, currentcolor);
+                }
             } 
             else if (xpos < BOXSIZE * 3 + BOXSIZE/2) {
-                putPiece(2);
-                // a. Indicator of the last piece that has been placed and where
-
-                tft.fillTriangle((BOXSIZE / 2) + (BOXSIZE / 2) + (BOXSIZE*2),BOXSIZE * 3/4,(BOXSIZE / 4)  + (BOXSIZE / 2) + (BOXSIZE*2),BOXSIZE /2,(BOXSIZE * 3/4) + (BOXSIZE / 2) + (BOXSIZE*2), BOXSIZE /2, currentcolor);
-                tft.fillRect((BOXSIZE * 4/10) + (BOXSIZE / 2) + (BOXSIZE*2), BOXSIZE /10, BOXSIZE /5, BOXSIZE * 2/5, currentcolor);
+                // a. Bound check to ensure they dont overflow the board
+                if (Heights[2] <= 6){
+                    // b. Place the piece at the specified column
+                    putPiece(2);
+                    // c. Indicator of the last piece that has been placed and where
+                    tft.fillTriangle((BOXSIZE / 2) + (BOXSIZE / 2) + (BOXSIZE*2),BOXSIZE * 3/4,(BOXSIZE / 4)  + (BOXSIZE / 2) + (BOXSIZE*2),BOXSIZE /2,(BOXSIZE * 3/4) + (BOXSIZE / 2) + (BOXSIZE*2), BOXSIZE /2, currentcolor);
+                    tft.fillRect((BOXSIZE * 4/10) + (BOXSIZE / 2) + (BOXSIZE*2), BOXSIZE /10, BOXSIZE /5, BOXSIZE * 2/5, currentcolor);
+                }
             } 
             else if (xpos < BOXSIZE * 4 + BOXSIZE/2) {
-                putPiece(3);  
-                // a. Indicator of the last piece that has been placed and where
-                tft.fillTriangle((BOXSIZE / 2) + (BOXSIZE / 2) + (BOXSIZE*3),BOXSIZE * 3/4,(BOXSIZE / 4)  + (BOXSIZE / 2) + (BOXSIZE*3),BOXSIZE /2,(BOXSIZE * 3/4) + (BOXSIZE / 2) + (BOXSIZE*3), BOXSIZE /2, currentcolor);
-                tft.fillRect((BOXSIZE * 4/10) + (BOXSIZE / 2) + (BOXSIZE*3), BOXSIZE /10, BOXSIZE /5, BOXSIZE * 2/5, currentcolor);
+                // a. Bound check to ensure they dont overflow the board
+                if (Heights[3] <= 6){
+                    // b. Place the piece at the specified column
+                    putPiece(3);  
+                    // c. Indicator of the last piece that has been placed and where
+                    tft.fillTriangle((BOXSIZE / 2) + (BOXSIZE / 2) + (BOXSIZE*3),BOXSIZE * 3/4,(BOXSIZE / 4)  + (BOXSIZE / 2) + (BOXSIZE*3),BOXSIZE /2,(BOXSIZE * 3/4) + (BOXSIZE / 2) + (BOXSIZE*3), BOXSIZE /2, currentcolor);
+                    tft.fillRect((BOXSIZE * 4/10) + (BOXSIZE / 2) + (BOXSIZE*3), BOXSIZE /10, BOXSIZE /5, BOXSIZE * 2/5, currentcolor);
+                }
             } 
             else if (xpos < BOXSIZE * 5 + BOXSIZE/2) {
-                putPiece(4);
-                // a. Indicator of the last piece that has been placed and where
-                tft.fillTriangle((BOXSIZE / 2) + (BOXSIZE / 2) + (BOXSIZE*4),BOXSIZE * 3/4,(BOXSIZE / 4)  + (BOXSIZE / 2) + (BOXSIZE*4),BOXSIZE /2,(BOXSIZE * 3/4) + (BOXSIZE / 2) + (BOXSIZE*4), BOXSIZE /2, currentcolor);
-                tft.fillRect((BOXSIZE * 4/10) + (BOXSIZE / 2) + (BOXSIZE*4), BOXSIZE /10, BOXSIZE /5, BOXSIZE * 2/5, currentcolor);
+                // a. Bound check to ensure they dont overflow the board
+                if (Heights[4] <= 6){
+                    // b. Place the piece at the specified column
+                    putPiece(4);
+                    // c. Indicator of the last piece that has been placed and where
+                    tft.fillTriangle((BOXSIZE / 2) + (BOXSIZE / 2) + (BOXSIZE*4),BOXSIZE * 3/4,(BOXSIZE / 4)  + (BOXSIZE / 2) + (BOXSIZE*4),BOXSIZE /2,(BOXSIZE * 3/4) + (BOXSIZE / 2) + (BOXSIZE*4), BOXSIZE /2, currentcolor);
+                    tft.fillRect((BOXSIZE * 4/10) + (BOXSIZE / 2) + (BOXSIZE*4), BOXSIZE /10, BOXSIZE /5, BOXSIZE * 2/5, currentcolor);
+                }
             } 
             else if (xpos < BOXSIZE * 6 + BOXSIZE/2) {
-                putPiece(5);
-                // a. Indicator of the last piece that has been placed and where
-                tft.fillTriangle((BOXSIZE / 2) + (BOXSIZE / 2) + (BOXSIZE*5),BOXSIZE * 3/4,(BOXSIZE / 4)  + (BOXSIZE / 2) + (BOXSIZE*5),BOXSIZE /2,(BOXSIZE * 3/4) + (BOXSIZE / 2) + (BOXSIZE*5), BOXSIZE /2, currentcolor);
-                tft.fillRect((BOXSIZE * 4/10) + (BOXSIZE / 2) + (BOXSIZE*5), BOXSIZE /10, BOXSIZE /5, BOXSIZE * 2/5, currentcolor);
+                // a. Bound check to ensure they dont overflow the board
+                if (Heights[5] <= 6){
+                    // b. Place the piece at the specified column
+                    putPiece(5);
+                    // c. Indicator of the last piece that has been placed and where
+                    tft.fillTriangle((BOXSIZE / 2) + (BOXSIZE / 2) + (BOXSIZE*5),BOXSIZE * 3/4,(BOXSIZE / 4)  + (BOXSIZE / 2) + (BOXSIZE*5),BOXSIZE /2,(BOXSIZE * 3/4) + (BOXSIZE / 2) + (BOXSIZE*5), BOXSIZE /2, currentcolor);
+                    tft.fillRect((BOXSIZE * 4/10) + (BOXSIZE / 2) + (BOXSIZE*5), BOXSIZE /10, BOXSIZE /5, BOXSIZE * 2/5, currentcolor);
+                }
             } 
             else if (xpos < BOXSIZE * 7 + BOXSIZE/2) {
-                putPiece(6);
-                // a. Indicator of the last piece that has been placed and where
-                tft.fillTriangle((BOXSIZE / 2) + (BOXSIZE / 2) + (BOXSIZE*6),BOXSIZE * 3/4,(BOXSIZE / 4)  + (BOXSIZE / 2) + (BOXSIZE*6),BOXSIZE /2,(BOXSIZE * 3/4) + (BOXSIZE / 2) + (BOXSIZE*6), BOXSIZE /2, currentcolor);
-                tft.fillRect((BOXSIZE * 4/10) + (BOXSIZE / 2) + (BOXSIZE*6), BOXSIZE /10, BOXSIZE /5, BOXSIZE * 2/5, currentcolor);
+                // a. Bound check to ensure they dont overflow the board
+                if (Heights[6] <= 6){
+                    // b. Place the piece at the specified column
+                    putPiece(6);
+                    // c. Indicator of the last piece that has been placed and where
+                    tft.fillTriangle((BOXSIZE / 2) + (BOXSIZE / 2) + (BOXSIZE*6),BOXSIZE * 3/4,(BOXSIZE / 4)  + (BOXSIZE / 2) + (BOXSIZE*6),BOXSIZE /2,(BOXSIZE * 3/4) + (BOXSIZE / 2) + (BOXSIZE*6), BOXSIZE /2, currentcolor);
+                    tft.fillRect((BOXSIZE * 4/10) + (BOXSIZE / 2) + (BOXSIZE*6), BOXSIZE /10, BOXSIZE /5, BOXSIZE * 2/5, currentcolor);
+                }
             } 
         }
     }
