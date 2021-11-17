@@ -56,6 +56,7 @@ Player Board[7][7];
 unsigned char Heights[7] = {0, 0, 0, 0, 0, 0, 0};
 Player currPlayer = Player1;
 bool Won = false;
+unsigned char Tie;
 //
 // End of Game Initializations
 //
@@ -267,6 +268,10 @@ void showStartScreen(void){
 
 }
 
+void showEndScreen(Player p){
+
+}
+
 void setup(void){
     delay(5000);
 
@@ -293,6 +298,7 @@ void loop(void){
     //      a. Bound check to ensure they dont overflow the board
     //      b. Place the piece at the specified column
     //      c. Indicator of the last piece that has been placed and where
+    // V. Check if Tie has occurred
 
 
     // I. Initialize touch
@@ -413,5 +419,15 @@ void loop(void){
                 }
             } 
         }
+    }
+
+    // V. Check if Tie has occurred
+    for (unsigned char i = 0; i < 7; i++){
+        if (Heights[i] == 6){
+            Tie++;
+        }
+    }
+    if (Tie == 7) {
+        showEndScreen(NoPlayer);
     }
 }
