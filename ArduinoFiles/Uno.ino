@@ -3,7 +3,11 @@
 MCUFRIEND_kbv tft;       // hard-wired for UNO shields anyway.
 #include <TouchScreen.h>
 
+
+
+
 // SUIT was a play tester
+// EASTER EGG addon --- change the thing to squares and use the BLACK background green and orange
 
 
 
@@ -28,6 +32,8 @@ uint8_t Orientation = 3;    //LANDSCAPE
 #define BLACK   0x0000
 #define BLUE    0x001F
 #define RED     0xF800
+#define ORANGE  0xFAE0
+#define ORANGE2 0xF9E0
 #define GREEN   0x07E0
 #define CYAN    0x07FF
 #define MAGENTA 0xF81F
