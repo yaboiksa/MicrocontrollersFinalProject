@@ -52,8 +52,9 @@ bool Won = false;
 
 void putPiece(unsigned char Column){
     // I. Place the Piece
-    // II. Check if win condition is met
-    // III. Switch which player
+    // II. Display said update
+    // III. Check if win condition is met
+    // IV. Switch which player
 
     unsigned char currX = Column;
     unsigned char currY = Heights[Column];
@@ -62,12 +63,16 @@ void putPiece(unsigned char Column){
     Board[currY][currX] = currPlayer;
     Heights[Column] += 1;
 
-    // II. Check if win condition is met
+
+    // II. Display said update
+    display();
+
+    // III. Check if win condition is met
     checkWin(currY, currX);
     if (Won == true)
         return;      
 
-    // III. Switch which player
+    // IV. Switch which player
     if (currPlayer == Player1){
         currPlayer = Player2;
     }
@@ -75,7 +80,6 @@ void putPiece(unsigned char Column){
         currPlayer = Player1;
     }
 
-    display();
 
 }
 
@@ -260,17 +264,6 @@ void display(void){
         tft.fillRect((BOXSIZE * 4/10) + (BOXSIZE / 2) + (BOXSIZE*j), BOXSIZE /10, BOXSIZE /5, BOXSIZE * 2/5, BLUE);
     }
 
-
-    /*
-    // may need to change row and column
-    for (int column = 6; column >= 0; i--) {
-        for (int row = 0; row < 7; row++) {
-            // print Board[column][row]
-        }
-    }
-    */
-
-
     // III. Draw the Pieces/holes
     for (int column = 0; column < 7; column++){
         for (int row = 0; row < 7; row++){
@@ -309,6 +302,12 @@ void setup(void){
 }
 
 void loop(void){
+    // I. Initialize touch
+    // II. Check for the pressure threshhold and map the x and y position
+    // III. Check regions for piece addition
+
+
+    // I. Initialize touch
     uint16_t xpos, ypos;  //screen coordinates
     tp = ts.getPoint();   //tp.x, tp.y are ADC values
 
@@ -318,6 +317,8 @@ void loop(void){
     // we have some minimum pressure we consider 'valid'
     // pressure of 0 means no pressing!
 
+
+    // II. Check for the pressure threshhold and map the x and y position
     if (tp.z > MINPRESSURE && tp.z < MAXPRESSURE) {
         // most mcufriend have touch (with icons) that extends below the TFT
         // screens without icons need to reserve a space for "erase"
@@ -344,7 +345,7 @@ void loop(void){
                 break;
         }
 
-        // are we in top color box area ?
+        // III. Check regions for piece addition
         if (ypos < BOXSIZE) {
             if (currPlayer == Player1){
                 currentcolor = RED;
@@ -355,38 +356,38 @@ void loop(void){
 
             if (xpos < BOXSIZE + BOXSIZE/2) {
                 putPiece(0);
-                tft.fillTriangle((BOXSIZE / 2) + (BOXSIZE / 2) + (BOXSIZE*1),BOXSIZE * 3/4,(BOXSIZE / 4)  + (BOXSIZE / 2) + (BOXSIZE*1),BOXSIZE /2,(BOXSIZE * 3/4) + (BOXSIZE / 2) + (BOXSIZE*1), BOXSIZE /2, currentcolor);
-                tft.fillRect((BOXSIZE * 4/10) + (BOXSIZE / 2) + (BOXSIZE*1), BOXSIZE /10, BOXSIZE /5, BOXSIZE * 2/5, currentcolor);
+                tft.fillTriangle((BOXSIZE / 2) + (BOXSIZE / 2), BOXSIZE * 3/4,(BOXSIZE / 4)  + (BOXSIZE / 2),BOXSIZE /2,(BOXSIZE * 3/4) + (BOXSIZE / 2), BOXSIZE /2, currentcolor);
+                tft.fillRect((BOXSIZE * 4/10) + (BOXSIZE / 2), BOXSIZE /10, BOXSIZE /5, BOXSIZE * 2/5, currentcolor);
             } 
             else if (xpos < BOXSIZE * 2 + BOXSIZE/2) {
                 putPiece(1);
-                tft.fillTriangle((BOXSIZE / 2) + (BOXSIZE / 2) + (BOXSIZE*2),BOXSIZE * 3/4,(BOXSIZE / 4)  + (BOXSIZE / 2) + (BOXSIZE*2),BOXSIZE /2,(BOXSIZE * 3/4) + (BOXSIZE / 2) + (BOXSIZE*2), BOXSIZE /2, currentcolor);
-                tft.fillRect((BOXSIZE * 4/10) + (BOXSIZE / 2) + (BOXSIZE*2), BOXSIZE /10, BOXSIZE /5, BOXSIZE * 2/5, currentcolor);
+                tft.fillTriangle((BOXSIZE / 2) + (BOXSIZE / 2) + (BOXSIZE),BOXSIZE * 3/4,(BOXSIZE / 4)  + (BOXSIZE / 2) + (BOXSIZE),BOXSIZE /2,(BOXSIZE * 3/4) + (BOXSIZE / 2) + (BOXSIZE), BOXSIZE /2, currentcolor);
+                tft.fillRect((BOXSIZE * 4/10) + (BOXSIZE / 2) + (BOXSIZE), BOXSIZE /10, BOXSIZE /5, BOXSIZE * 2/5, currentcolor);
             } 
             else if (xpos < BOXSIZE * 3 + BOXSIZE/2) {
                 putPiece(2);
-                tft.fillTriangle((BOXSIZE / 2) + (BOXSIZE / 2) + (BOXSIZE*3),BOXSIZE * 3/4,(BOXSIZE / 4)  + (BOXSIZE / 2) + (BOXSIZE*3),BOXSIZE /2,(BOXSIZE * 3/4) + (BOXSIZE / 2) + (BOXSIZE*3), BOXSIZE /2, currentcolor);
-                tft.fillRect((BOXSIZE * 4/10) + (BOXSIZE / 2) + (BOXSIZE*3), BOXSIZE /10, BOXSIZE /5, BOXSIZE * 2/5, currentcolor);
+                tft.fillTriangle((BOXSIZE / 2) + (BOXSIZE / 2) + (BOXSIZE*2),BOXSIZE * 3/4,(BOXSIZE / 4)  + (BOXSIZE / 2) + (BOXSIZE*2),BOXSIZE /2,(BOXSIZE * 3/4) + (BOXSIZE / 2) + (BOXSIZE*2), BOXSIZE /2, currentcolor);
+                tft.fillRect((BOXSIZE * 4/10) + (BOXSIZE / 2) + (BOXSIZE*2), BOXSIZE /10, BOXSIZE /5, BOXSIZE * 2/5, currentcolor);
             } 
             else if (xpos < BOXSIZE * 4 + BOXSIZE/2) {
                 putPiece(3);  
-                tft.fillTriangle((BOXSIZE / 2) + (BOXSIZE / 2) + (BOXSIZE*4),BOXSIZE * 3/4,(BOXSIZE / 4)  + (BOXSIZE / 2) + (BOXSIZE*4),BOXSIZE /2,(BOXSIZE * 3/4) + (BOXSIZE / 2) + (BOXSIZE*4), BOXSIZE /2, currentcolor);
-                tft.fillRect((BOXSIZE * 4/10) + (BOXSIZE / 2) + (BOXSIZE*4), BOXSIZE /10, BOXSIZE /5, BOXSIZE * 2/5, currentcolor);
+                tft.fillTriangle((BOXSIZE / 2) + (BOXSIZE / 2) + (BOXSIZE*3),BOXSIZE * 3/4,(BOXSIZE / 4)  + (BOXSIZE / 2) + (BOXSIZE*3),BOXSIZE /2,(BOXSIZE * 3/4) + (BOXSIZE / 2) + (BOXSIZE*3), BOXSIZE /2, currentcolor);
+                tft.fillRect((BOXSIZE * 4/10) + (BOXSIZE / 2) + (BOXSIZE*3), BOXSIZE /10, BOXSIZE /5, BOXSIZE * 2/5, currentcolor);
             } 
             else if (xpos < BOXSIZE * 5 + BOXSIZE/2) {
                 putPiece(4);
-                tft.fillTriangle((BOXSIZE / 2) + (BOXSIZE / 2) + (BOXSIZE*5),BOXSIZE * 3/4,(BOXSIZE / 4)  + (BOXSIZE / 2) + (BOXSIZE*5),BOXSIZE /2,(BOXSIZE * 3/4) + (BOXSIZE / 2) + (BOXSIZE*5), BOXSIZE /2, currentcolor);
-                tft.fillRect((BOXSIZE * 4/10) + (BOXSIZE / 2) + (BOXSIZE*5), BOXSIZE /10, BOXSIZE /5, BOXSIZE * 2/5, currentcolor);
+                tft.fillTriangle((BOXSIZE / 2) + (BOXSIZE / 2) + (BOXSIZE*4),BOXSIZE * 3/4,(BOXSIZE / 4)  + (BOXSIZE / 2) + (BOXSIZE*4),BOXSIZE /2,(BOXSIZE * 3/4) + (BOXSIZE / 2) + (BOXSIZE*4), BOXSIZE /2, currentcolor);
+                tft.fillRect((BOXSIZE * 4/10) + (BOXSIZE / 2) + (BOXSIZE*4), BOXSIZE /10, BOXSIZE /5, BOXSIZE * 2/5, currentcolor);
             } 
             else if (xpos < BOXSIZE * 6 + BOXSIZE/2) {
                 putPiece(5);
-                tft.fillTriangle((BOXSIZE / 2) + (BOXSIZE / 2) + (BOXSIZE*6),BOXSIZE * 3/4,(BOXSIZE / 4)  + (BOXSIZE / 2) + (BOXSIZE*6),BOXSIZE /2,(BOXSIZE * 3/4) + (BOXSIZE / 2) + (BOXSIZE*6), BOXSIZE /2, currentcolor);
-                tft.fillRect((BOXSIZE * 4/10) + (BOXSIZE / 2) + (BOXSIZE*6), BOXSIZE /10, BOXSIZE /5, BOXSIZE * 2/5, currentcolor);
+                tft.fillTriangle((BOXSIZE / 2) + (BOXSIZE / 2) + (BOXSIZE*5),BOXSIZE * 3/4,(BOXSIZE / 4)  + (BOXSIZE / 2) + (BOXSIZE*5),BOXSIZE /2,(BOXSIZE * 3/4) + (BOXSIZE / 2) + (BOXSIZE*5), BOXSIZE /2, currentcolor);
+                tft.fillRect((BOXSIZE * 4/10) + (BOXSIZE / 2) + (BOXSIZE*5), BOXSIZE /10, BOXSIZE /5, BOXSIZE * 2/5, currentcolor);
             } 
             else if (xpos < BOXSIZE * 7 + BOXSIZE/2) {
                 putPiece(6);
-                tft.fillTriangle((BOXSIZE / 2) + (BOXSIZE / 2) + (BOXSIZE*7),BOXSIZE * 3/4,(BOXSIZE / 4)  + (BOXSIZE / 2) + (BOXSIZE*7),BOXSIZE /2,(BOXSIZE * 3/4) + (BOXSIZE / 2) + (BOXSIZE*7), BOXSIZE /2, currentcolor);
-                tft.fillRect((BOXSIZE * 4/10) + (BOXSIZE / 2) + (BOXSIZE*7), BOXSIZE /10, BOXSIZE /5, BOXSIZE * 2/5, currentcolor);
+                tft.fillTriangle((BOXSIZE / 2) + (BOXSIZE / 2) + (BOXSIZE*6),BOXSIZE * 3/4,(BOXSIZE / 4)  + (BOXSIZE / 2) + (BOXSIZE*6),BOXSIZE /2,(BOXSIZE * 3/4) + (BOXSIZE / 2) + (BOXSIZE*6), BOXSIZE /2, currentcolor);
+                tft.fillRect((BOXSIZE * 4/10) + (BOXSIZE / 2) + (BOXSIZE*6), BOXSIZE /10, BOXSIZE /5, BOXSIZE * 2/5, currentcolor);
             } 
         }
     }
