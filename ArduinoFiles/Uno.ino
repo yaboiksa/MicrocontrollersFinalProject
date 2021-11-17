@@ -136,7 +136,6 @@ void checkWin(unsigned char y, unsigned char x) {
                     connectedPieces++;
                 }
                 else {
-                    // dir = true;
                     break;
                 }
             }
@@ -149,7 +148,6 @@ void checkWin(unsigned char y, unsigned char x) {
                     connectedPieces++;
                 }
                 else {
-                    // dir = false;
                     break;
                 }
             }
@@ -162,11 +160,9 @@ void checkWin(unsigned char y, unsigned char x) {
         }
     }
 
-
     //      c. Check left diagonal
     connectedPieces = 1;
     if (((x >= 0) || (x <= 6)) && ((y >= 0) || (y <= 6))) {
-
 
         //  }Check left side
         for (i = 1; i < 5; i++) {
@@ -175,7 +171,6 @@ void checkWin(unsigned char y, unsigned char x) {
                     connectedPieces++;
                 }
                 else {
-                    // dir = true;
                     break;
                 }
             }
@@ -188,7 +183,6 @@ void checkWin(unsigned char y, unsigned char x) {
                     connectedPieces++;
                 }
                 else {
-                    // dir = false;
                     break;
                 }
             }
@@ -212,7 +206,6 @@ void checkWin(unsigned char y, unsigned char x) {
                     connectedPieces++;
                 }
                 else {
-                    // dir = true;
                     break;
                 }
             }
@@ -225,7 +218,6 @@ void checkWin(unsigned char y, unsigned char x) {
                     connectedPieces++;
                 }
                 else {
-                    // dir = false;
                     break;
                 }
             }
@@ -235,8 +227,7 @@ void checkWin(unsigned char y, unsigned char x) {
         if (connectedPieces >= 4) {
             Won = true;
             return;
-        }
-        
+        } 
     }
 }
 
