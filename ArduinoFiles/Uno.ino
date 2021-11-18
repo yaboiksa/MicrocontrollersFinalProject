@@ -416,7 +416,25 @@ void showEndScreen(Player p){
     // I. Delcare winner
     // II. Reset after 10 second delay
     // III. Setup for new game
+    tft.setTextSize(3);
+    tft.setCursor(BOXSIZE + BOXSIZE * 1 / 3, BOXSIZE * 3);
+    tft.fillRect(BOXSIZE, BOXSIZE * 2 + (BOXSIZE / 2), BOXSIZE * 6 + BOXSIZE / 4, BOXSIZE * 5/3, WHITE);
+    if (p == NoPlayer){
+        tft.setTextColor(P1Color);
+        tft.print("NO PLAYER");
+    }
+    else if (p == Player1){
+        tft.setTextColor(P1Color);
+        tft.print("PLAYER 1");
+    }
+    else if (p == Player2){
+        tft.setTextColor(P2Color);
+        tft.print("PLAYER 2");
+    }
 
+    tft.setTextColor(bgColor);
+    tft.println(" WON!");
+    return;
 }
 
 void setup(void){
@@ -577,6 +595,7 @@ void loop(void){
     }
     if (Tie == 7) {
         showEndScreen(NoPlayer);
+        return;
     }
     else {
         Tie = 0;
