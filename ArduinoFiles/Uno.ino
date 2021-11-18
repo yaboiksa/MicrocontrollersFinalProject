@@ -413,6 +413,9 @@ void showStartScreen(void){
 }
 
 void showEndScreen(Player p){
+    // I. Delcare winner
+    // II. Reset after 10 second delay
+    // III. Setup for new game
 
 }
 
