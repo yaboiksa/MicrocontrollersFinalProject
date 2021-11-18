@@ -31,13 +31,14 @@ uint8_t Orientation = 3;    //LANDSCAPE
 // Assign human-readable names to some common 16-bit color values:
 #define BLACK   0x0000
 #define BLUE    0x001F
-#define RED     0xF800
+#define RED     0xF800 //st
 #define ORANGE  0xFAE0
 #define ORANGE2 0xF9E0
 #define GREEN   0x07E0
+#define DGREEN  0x0221 //bg
 #define CYAN    0x07FF
-#define MAGENTA 0xF81F
-#define YELLOW  0xFFE0
+#define MAGENTA 0xF81F //p2
+#define YELLOW  0xFFE0 // p1
 #define WHITE   0xFFFF
 //
 // End of Display Initialization
@@ -54,8 +55,12 @@ enum Player{
 
 Player Board[7][7];
 unsigned char Heights[7] = {0, 0, 0, 0, 0, 0, 0};
+uint16_t stColor, bgColor, P1Color, P2Color;
+unsigned char colorSelect;
 Player currPlayer = Player1;
 bool Won = false;
+bool egg1 = false;
+bool egg2 = false;
 unsigned char Tie;
 //
 // End of Game Initializations
@@ -80,9 +85,10 @@ void putPiece(unsigned char Column){
 
     // III. Check if win condition is met
     checkWin(currY, currX);
-    if (Won == true)
-        return;      
-
+    if (Won == true){
+        showEndScreen(currPlayer);
+    }
+        
     // IV. Switch which player
     if (currPlayer == Player1){
         currPlayer = Player2;
@@ -239,14 +245,14 @@ void display(void){
 
     // I. Draw the board
     tft.fillScreen(WHITE);
-    tft.fillRect(0, BOXSIZE, BOXSIZE * 8, BOXSIZE * 7, YELLOW);
-    tft.fillRect(0, BOXSIZE, BOXSIZE / 2, BOXSIZE * 7, BLUE);
-    tft.fillRect(BOXSIZE * 15/2, BOXSIZE, BOXSIZE / 2, BOXSIZE * 7, BLUE);
+    tft.fillRect(0, BOXSIZE, BOXSIZE * 8, BOXSIZE * 7, bgColor);
+    tft.fillRect(0, BOXSIZE, BOXSIZE / 2, BOXSIZE * 7, stColor);
+    tft.fillRect(BOXSIZE * 15/2, BOXSIZE, BOXSIZE / 2, BOXSIZE * 7, stColor);
 
     // II. Draw the controls
     for (int j = 0;  j < 7; j++){
-        tft.fillTriangle((BOXSIZE / 2) + (BOXSIZE / 2) + (BOXSIZE*j),BOXSIZE * 3/4,(BOXSIZE / 4)  + (BOXSIZE / 2) + (BOXSIZE*j),BOXSIZE /2,(BOXSIZE * 3/4) + (BOXSIZE / 2) + (BOXSIZE*j), BOXSIZE /2, BLUE);
-        tft.fillRect((BOXSIZE * 4/10) + (BOXSIZE / 2) + (BOXSIZE*j), BOXSIZE /10, BOXSIZE /5, BOXSIZE * 2/5, BLUE);
+        tft.fillTriangle((BOXSIZE / 2) + (BOXSIZE / 2) + (BOXSIZE*j),BOXSIZE * 3/4,(BOXSIZE / 4)  + (BOXSIZE / 2) + (BOXSIZE*j),BOXSIZE /2,(BOXSIZE * 3/4) + (BOXSIZE / 2) + (BOXSIZE*j), BOXSIZE /2, stColor);
+        tft.fillRect((BOXSIZE * 4/10) + (BOXSIZE / 2) + (BOXSIZE*j), BOXSIZE /10, BOXSIZE /5, BOXSIZE * 2/5, stColor);
     }
 
     // III. Draw the Pieces/holes
@@ -255,9 +261,9 @@ void display(void){
             if(Board[6 - column][row] == NoPlayer)
                 tft.fillCircle(BOXSIZE * (row + 1), (BOXSIZE * 7/10 ) * (column + 1) + (BOXSIZE/2) + 7, (BOXSIZE * 3/5) /2, WHITE);
             else if(Board[6 - column][row] == Player1)
-                tft.fillCircle(BOXSIZE * (row + 1), (BOXSIZE * 7/10 ) * (column + 1) + (BOXSIZE/2) + 7, (BOXSIZE * 3/5) /2, RED);
+                tft.fillCircle(BOXSIZE * (row + 1), (BOXSIZE * 7/10 ) * (column + 1) + (BOXSIZE/2) + 7, (BOXSIZE * 3/5) /2, P1Color);
             else if(Board[6 - column][row] == Player2)
-                tft.fillCircle(BOXSIZE * (row + 1), (BOXSIZE * 7/10 ) * (column + 1) + (BOXSIZE/2) + 7, (BOXSIZE * 3/5) /2, BLACK);
+                tft.fillCircle(BOXSIZE * (row + 1), (BOXSIZE * 7/10 ) * (column + 1) + (BOXSIZE/2) + 7, (BOXSIZE * 3/5) /2, P2Color);
         }   
     }
     
@@ -265,6 +271,144 @@ void display(void){
 }
 
 void showStartScreen(void){
+    // I. Start button
+    // II. Color select button
+    //      a. Default the colors
+    //      b. If clicked button revolve colors
+
+    // I. Start button
+    tft.setTextSize(4);
+    tft.setTextColor(RED);
+    tft.setCursor(BOXSIZE * 2 + BOXSIZE / 2, BOXSIZE + BOXSIZE / 2);
+    tft.fillRect(BOXSIZE * 2, BOXSIZE, BOXSIZE * 4, BOXSIZE * 5/3, WHITE);
+    tft.println("START");
+
+
+    // II. Color select button
+    //      a. Default the colors
+    colorSelect = 0;
+    stColor = BLUE;
+    bgColor = BLUE;
+    P1Color = RED;
+    P2Color = YELLOW;
+    tft.setTextSize(3);
+    tft.setCursor(BOXSIZE + BOXSIZE / 2, BOXSIZE * 3 + BOXSIZE / 2);
+    tft.fillRect(BOXSIZE, BOXSIZE * 3, BOXSIZE * 6 + BOXSIZE / 4, BOXSIZE * 5/3, bgColor);
+    tft.drawRect(BOXSIZE, BOXSIZE * 3, BOXSIZE * 6 + BOXSIZE / 4, BOXSIZE * 5/3, stColor);
+    tft.drawRect(BOXSIZE + 1, BOXSIZE * 3 + 1, BOXSIZE * 6 + BOXSIZE / 4 - 2, BOXSIZE * 5/3 - 2, stColor);
+    tft.drawRect(BOXSIZE + 2, BOXSIZE * 3 + 2, BOXSIZE * 6 + BOXSIZE / 4 - 3, BOXSIZE * 5/3 - 3, stColor);
+    tft.drawRect(BOXSIZE + 3, BOXSIZE * 3 + 3, BOXSIZE * 6 + BOXSIZE / 4 - 4, BOXSIZE * 5/3 - 4, stColor);
+    tft.setTextColor(P1Color);
+    tft.print("COLOR");
+    tft.setTextColor(P2Color);
+    tft.println(" SELECT");
+    
+
+    while (1) {
+        uint16_t xpos, ypos;  //screen coordinates
+        tp = ts.getPoint();   //tp.x, tp.y are ADC values
+
+        // if sharing pins, you'll need to fix the directions of the touchscreen pins
+        pinMode(XM, OUTPUT);
+        pinMode(YP, OUTPUT);
+    
+        if (tp.z < MINPRESSURE || tp.z > MAXPRESSURE) continue;
+
+        switch (Orientation) {
+            case 0:
+                xpos = map(tp.x, TS_LEFT, TS_RT, 0, tft.width());
+                ypos = map(tp.y, TS_TOP, TS_BOT, 0, tft.height());
+                break;
+            case 1:
+                xpos = map(tp.y, TS_TOP, TS_BOT, 0, tft.width());
+                ypos = map(tp.x, TS_RT, TS_LEFT, 0, tft.height());
+                break;
+            case 2:
+                xpos = map(tp.x, TS_RT, TS_LEFT, 0, tft.width());
+                ypos = map(tp.y, TS_BOT, TS_TOP, 0, tft.height());
+                break;
+            case 3:
+                xpos = map(tp.y, TS_BOT, TS_TOP, 0, tft.width());
+                ypos = map(tp.x, TS_LEFT, TS_RT, 0, tft.height());
+                break;
+        }
+
+        if (xpos > BOXSIZE && xpos < BOXSIZE * 8 + BOXSIZE / 4 && ypos > BOXSIZE * 3 && ypos < BOXSIZE * 3 + BOXSIZE * 8/3) {
+            colorSelect++;
+            switch (colorSelect)
+            {
+            case 1:
+                stColor = BLUE;
+                bgColor = YELLOW;
+                P1Color = RED;
+                P2Color = BLACK;
+                delay(500);
+                break;
+            case 2:
+                stColor = BLUE;
+                bgColor = RED;
+                P1Color = YELLOW;
+                P2Color = DGREEN;
+                delay(500);
+                break;
+            case 3:
+                stColor = RED;
+                bgColor = DGREEN;
+                P1Color = YELLOW;
+                P2Color = MAGENTA;
+                delay(500);
+                break;
+            case 4:
+                if (egg1 == true){
+                    stColor = GREEN;
+                    bgColor = WHITE;
+                    P1Color = MAGENTA;
+                    P2Color = YELLOW;
+                    delay(500);
+                }
+                break;
+            case 5:
+                if (egg2 == true){
+                    stColor = BLACK;
+                    bgColor = BLACK;
+                    P1Color = GREEN;
+                    P2Color = ORANGE2;
+                    delay(500);
+                }
+                break;
+            default:
+                stColor = BLUE;
+                bgColor = BLUE;
+                P1Color = RED;
+                P2Color = YELLOW;
+                colorSelect = 0;
+                delay(500);
+                break;
+            }
+            
+            tft.setTextSize(3);
+            tft.setCursor(BOXSIZE + BOXSIZE / 2, BOXSIZE * 3 + BOXSIZE / 2);
+            tft.fillRect(BOXSIZE, BOXSIZE * 3, BOXSIZE * 6 + BOXSIZE / 4, BOXSIZE * 5/3, bgColor);
+            tft.drawRect(BOXSIZE, BOXSIZE * 3, BOXSIZE * 6 + BOXSIZE / 4, BOXSIZE * 5/3, stColor);
+            tft.drawRect(BOXSIZE + 1, BOXSIZE * 3 + 1, BOXSIZE * 6 + BOXSIZE / 4 - 2, BOXSIZE * 5/3 - 2, stColor);
+            tft.drawRect(BOXSIZE + 2, BOXSIZE * 3 + 2, BOXSIZE * 6 + BOXSIZE / 4 - 3, BOXSIZE * 5/3 - 3, stColor);
+            tft.drawRect(BOXSIZE + 3, BOXSIZE * 3 + 3, BOXSIZE * 6 + BOXSIZE / 4 - 4, BOXSIZE * 5/3 - 4, stColor);
+            tft.setTextColor(P1Color);
+            tft.print("COLOR");
+            tft.setTextColor(P2Color);
+            tft.println(" SELECT");
+        }
+        if (xpos > BOXSIZE * 6 && xpos < BOXSIZE * 7 && ypos > 0 && ypos < BOXSIZE) {
+            tft.setTextSize(2);
+            egg1 = true;
+            tft.setCursor(0, 0);
+            tft.setTextColor(WHITE);
+            tft.println("Egg 1 has been found");
+        }
+        if (xpos > BOXSIZE * 2 && xpos < BOXSIZE * 6 && ypos > BOXSIZE && ypos < BOXSIZE * 8/3) break;
+    }
+    
+
 
 }
 
@@ -285,6 +429,7 @@ void setup(void){
     tft.fillScreen(BLACK);
 
     BOXSIZE = tft.width() / 8;
+    showStartScreen();
 
     display();
 
@@ -313,10 +458,10 @@ void loop(void){
 
     // II. Initialize the current competing colors
     if (currPlayer == Player1){
-        currentcolor = RED;
+        currentcolor = P1Color;
     }
     else {
-        currentcolor = BLACK;
+        currentcolor = P2Color;
     }
 
     // III. Check for the pressure threshhold and map the x and y position
@@ -429,5 +574,8 @@ void loop(void){
     }
     if (Tie == 7) {
         showEndScreen(NoPlayer);
+    }
+    else {
+        Tie = 0;
     }
 }
