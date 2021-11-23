@@ -24,7 +24,6 @@ TSPoint tp;
 #define MAXPRESSURE 1000
 
 int16_t BOXSIZE;
-int16_t PENRADIUS = 1;
 uint16_t ID, currentcolor;
 uint8_t Orientation = 3;    //LANDSCAPE
 
@@ -62,9 +61,20 @@ bool Won = false;
 bool egg1 = false;
 bool egg2 = false;
 unsigned char Tie;
+
 //
 // End of Game Initializations
 //
+
+String toString(){
+    String board;
+    for(int i = 0; i < 7; i++){
+        for(int j = 0; j < 7; j++){
+            board = board + Board[i][j];
+        }
+    }
+    return board;
+}
 
 void putPiece(unsigned char Column){
     // I. Place the Piece
@@ -96,8 +106,6 @@ void putPiece(unsigned char Column){
     else{
         currPlayer = Player1;
     }
-
-
 }
 
 void checkWin(unsigned char y, unsigned char x) {
@@ -112,8 +120,7 @@ void checkWin(unsigned char y, unsigned char x) {
     //          } And check right side
     //          } And check if at endpoints
     // II. If won output win
-
-    unsigned char connectedPieces;
+    unsigned char connectedPieces = 1;
     unsigned char i;
 
     // I. Check everything
@@ -233,6 +240,7 @@ void checkWin(unsigned char y, unsigned char x) {
         // II. If won output win
         if (connectedPieces >= 4) {
             Won = true;
+            connectedPieces = 0;
             return;
         } 
     }
@@ -421,19 +429,36 @@ void showEndScreen(Player p){
     tft.fillRect(BOXSIZE, BOXSIZE * 2 + (BOXSIZE / 2), BOXSIZE * 6 + BOXSIZE / 4, BOXSIZE * 5/3, WHITE);
     if (p == NoPlayer){
         tft.setTextColor(P1Color);
-        tft.print("NO PLAYER");
+        tft.print("NO WINNER!");
     }
     else if (p == Player1){
         tft.setTextColor(P1Color);
-        tft.print("PLAYER 1");
+        tft.print("PLAYER1");
     }
     else if (p == Player2){
         tft.setTextColor(P2Color);
-        tft.print("PLAYER 2");
+        tft.print("PLAYER2");
+    }
+    if ((p == Player1) || (p == Player2)){
+        tft.setTextColor(stColor);
+        tft.println(" WINS!");
     }
 
-    tft.setTextColor(bgColor);
-    tft.println(" WON!");
+    delay(10000);
+
+    for (int i = 0; i < 7; i++){
+        for (int j = 0; j < 7; j++){
+        Board[j][i] = NoPlayer;
+        }
+        Heights[i] = 0;
+    }
+    currPlayer = Player2;
+    Won = false;
+    Tie = 0;
+    tft.fillScreen(BLACK);
+    showStartScreen();
+
+    display();
     return;
 }
 
@@ -487,11 +512,7 @@ void loop(void){
 
     // III. Check for the pressure threshhold and map the x and y position
     if (tp.z > MINPRESSURE && tp.z < MAXPRESSURE) {
-        // most mcufriend have touch (with icons) that extends below the TFT
-        // screens without icons need to reserve a space for "erase"
-        // scale the ADC values from ts.getPoint() to screen values e.g. 0-239
-        //
-        // Calibration is true for PORTRAIT. tp.y is always long dimension 
+        // scale the ADC values from ts.getPoint() to screen values e.g. 0-239 
         // map to your current pixel orientation
         switch (Orientation) {
             case 0:
@@ -589,13 +610,20 @@ void loop(void){
 
     // V. Check if Tie has occurred
     for (unsigned char i = 0; i < 7; i++){
-        if (Heights[i] == 6){
+        if (Heights[i] == 7){
             Tie++;
         }
     }
     if (Tie == 7) {
+        String f = toString();
+        if (f.compareTo("1221121211221212211212112212122112121122121221121") == 0){
+            tft.setTextSize(2);
+            egg2 = true;
+            tft.setCursor(0, 0);
+            tft.setTextColor(BLACK);
+            tft.println("Egg 2 has been found");
+        }
         showEndScreen(NoPlayer);
-        return;
     }
     else {
         Tie = 0;
